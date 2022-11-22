@@ -1,0 +1,25 @@
+
+image: gitpod/workspace-dotnet:latest
+
+tasks:
+  - init: dotnet tool install -g dotnet-ef && export PATH="$PATH:/home/gitpod/.dotnet/tools" && npm i -g pnpm
+    command: dotnet tool restore && dotnet restore
+
+ports:
+  - name: debug api port
+    description: The product manager api
+    port: 5000
+    visibility: public
+    onOpen: ignore
+  - name: container api port
+    description: The product manager api
+    port: 8000
+    visibility: public
+    onOpen: ignore
+
+vscode:
+  extensions:
+    - muhammad-sammy.csharp
+    - ms-azuretools.vscode-docker
+    - fernandoescolar.vscode-solution-explorer
+    - rangav.vscode-thunder-client

@@ -1,0 +1,50 @@
+!jest.config.js
+*.d.ts
+node_modules
+
+# CDK asset staging directory
+.cdk.staging
+cdk.out
+
+# Parcel default cache directory
+.parcel-cache
+
+# Test results
+
+*.trx
+
+# Build results
+
+msbuild.*
+.build/
+[Bb]in/
+[Oo]bj/
+
+# NuGet Packages
+
+*.nupkg
+packages.config
+# The packages folder can be ignored because of Package Restore
+**/packages/*
+
+# IDEs
+
+## Visual Studio 2015+ cache/options directory
+.vs/
+*.fsproj.user
+
+## JetBrains Rider
+.idea/
+*.sln.iml
+
+## CodeRush
+.cr/
+
+## VSCode/ionide
+/.ionide/
+
+# macOS
+
+.DS_Store
+node_modules/
+.fake/
