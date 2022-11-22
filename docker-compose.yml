@@ -1,0 +1,66 @@
+version: "3.9"
+
+services:
+
+  postgres:
+    image: postgres:10
+    restart: always
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=admin
+      - POSTGRES_DB=products_db
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    ports:
+      - '5432:5432'
+  
+  product_manager_api:
+    container_name: product_manager_api
+    image: product-manager-api
+    build:
+      context: ./
+    depends_on:
+      - postgres
+      - flyway-migrator
+    ports:
+      - "8000:80"
+    links:
+      - postgres
+    environment:
+      - POSTGRES_SERVER=postgres
+      - POSTGRES_PORT=5432
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=admin
+      - POSTGRES_DB=products_db
+    restart: unless-stopped
+
+  pgadmin:
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@fnstack.io
+      PGADMIN_DEFAULT_PASSWORD: admin
+    depends_on:
+      - postgres
+    ports:
+      - "5050:80"
+    restart: unless-stopped
+    links:
+      - postgres
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin
+
+  flyway-migrator:
+    image: boxfuse/flyway:5-alpine
+    command: -url=jdbc:postgresql://postgres:5432/products_db -schemas=public -baselineOnMigrate=true -user=admin -password=admin -connectRetries=10 migrate
+    volumes:
+      - ./migrations:/flyway/sql
+    depends_on:
+      - postgres
+    links:
+      - postgres
+
+volumes:
+  postgres-data:
+    driver: local
+  pgadmin-data:
+    driver: local
